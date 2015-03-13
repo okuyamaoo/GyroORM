@@ -25,7 +25,7 @@ public class ObjectMapper {
 				BaseModel mappingBaseModel = mappingModel.getTargetModel();
 				
 				// 主キー設定
-				mappingModel.setId((Double)result.get("id"));
+				mappingModel.setId((Long)result.get("id"));
 				// トランザクションを取得時に利用したモデルから取得し引き継ぎ
 				mappingModel.setTransactionFolder(model.getTransactionFolder());
 

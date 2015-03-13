@@ -116,12 +116,12 @@ public interface BaseModelInterface {
 	/**
 	 * 自動プライマリーキー取得 
 	 */
-	public double getId();
+	public long getId();
 
 	/**
 	 * 自動プライマリーキー取得 
 	 */
-	public void setId(double id);
+	public void setId(long id);
 
 	/**
 	 * Update時に明示的にNullでアップデートしたい場合にこのメソッドに対象カラム名を渡しておく.<br>

@@ -14,7 +14,7 @@ public class TestTable extends BaseModel {
 	@RelationData(modelClassName="gyroorm.testmodel.TestChildData1", joinQuery="age=${age}")
 	public List<TestChildData1> child1List = null;
 
-	@RelationData(modelClassName="gyroorm.testmodel.TestChildData2", joinQuery=" age = ${age} and name = ${name} ", whereQuery="address like ? or address like ?", whereQueryParameter="%奈良%,%大阪%")
+	@RelationData(modelClassName="gyroorm.testmodel.TestChildData2", joinQuery=" age = ${age} and name = ${name} ", whereQuery="address like ? or address like ? or address like ?", whereQueryParameter="%東京%,%奈良%,%大阪%")
 	public List<TestChildData2> child2List = null;
 
 

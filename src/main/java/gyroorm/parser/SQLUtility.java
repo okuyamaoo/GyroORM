@@ -32,7 +32,7 @@ public class SQLUtility {
 		String sep = "";
 
 		if (createIdColumn) {
-			queryBuf.append(modelInfo.primaryKeyName).append(" DOUBLE ").append("NOT NULL PRIMARY KEY ");
+			queryBuf.append(modelInfo.primaryKeyName).append(" BIGINT ").append("auto_increment PRIMARY KEY ");
 			sep = ",";
 		}
 
@@ -57,6 +57,13 @@ public class SQLUtility {
 								} else if (modelInfo.fieldTypeList[idx].equals("doube") || modelInfo.fieldTypeList[idx].equals("java.lang.Double") || 
 														modelInfo.fieldTypeList[idx].equals("float") || modelInfo.fieldTypeList[idx].equals("java.lang.Float")) {
 									queryBuf.append("DOUBLE");
+								} else if (modelInfo.fieldTypeList[idx].toLowerCase().equals("date") || modelInfo.fieldTypeList[idx].equals("java.util.Date") || 
+														modelInfo.fieldTypeList[idx].toLowerCase().equals("datetime")) {
+									queryBuf.append("DATETIME");
+								} else if (modelInfo.fieldTypeList[idx].toLowerCase().equals("timestamp") || modelInfo.fieldTypeList[idx].equals("java.sql.Timestamp") || 
+														modelInfo.fieldTypeList[idx].toLowerCase().equals("time")) {
+									queryBuf.append("TIMESTAMP");
+
 								} else {
 									queryBuf.append("varchar(255)");
 								}
@@ -67,6 +74,11 @@ public class SQLUtility {
 				}
 				idx++;
     }
+		if (createIdColumn) {
+			queryBuf.append(", index(");
+			queryBuf.append(modelInfo.primaryKeyName);
+			queryBuf.append(")");
+		}
 		queryBuf.append(" )");
 		String queryStr = queryBuf.toString();
 		logger.fine(queryStr);
@@ -96,13 +108,13 @@ public class SQLUtility {
 		
 		String sep = "";
 		double generateId = -1.0;
-		if (autoId) {
-			queryBuf.append(modelInfo.primaryKeyName);
+		if (!autoId) {
+			/*queryBuf.append(modelInfo.primaryKeyName);
 			generateId = generateID(tableName);
 			sqlQueryFolder.addQueryParam(generateId);
 			model.setId(generateId);
 			
-			sep = ",";
+			sep = ",";*/
 		}
 
 		int idx = 0;

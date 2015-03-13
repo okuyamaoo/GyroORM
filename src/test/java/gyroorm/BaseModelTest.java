@@ -47,13 +47,6 @@ public class BaseModelTest
 			try {
 
 				
-					TestTable2 testTable2 = new TestTable2();
-					if (!testTable2.existTable()) {
-						System.out.println("Table Not Found !!!!!!!!!!!!!");
-						testTable2.migrate();
-					} else {
-						System.out.println("Table Found !!!!!!!!!!!!!");
-					}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

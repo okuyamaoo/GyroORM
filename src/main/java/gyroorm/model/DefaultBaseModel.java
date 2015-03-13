@@ -22,7 +22,7 @@ public abstract class DefaultBaseModel implements BaseModelInterface {
 
 	int mode = 1; // 1=RDB, 2=NOSQL
 
-	double id = -1;
+	long id = -1;
 
 	Map nullFieldMap = null;
 
@@ -335,6 +335,18 @@ public abstract class DefaultBaseModel implements BaseModelInterface {
 	}
 
 	/**
+	 * select文でのWhere句を特別指定したい場合のみ指定
+	 * 指定しない場合はWhere句なし
+	 */
+	public BaseModel where(String query, Object param) {
+		if (queryFolder == null) queryFolder = new QueryFolder();
+
+		Object[] params = {param};
+		queryFolder.addWhere(query, params);
+		return targetModel;
+	}
+
+	/**
 	 * select文でのlimit句を特別指定したい場合のみ指定
 	 * 指定しない場合は全件
 	 */
@@ -419,11 +431,11 @@ public abstract class DefaultBaseModel implements BaseModelInterface {
 		return this.targetModel;
 	}
 
-	public void setId(double idData) {
+	public void setId(long idData) {
 		id = idData;
 	}
 
-	public double getId() {
+	public long getId() {
 		return id;
 	}
 

@@ -6,7 +6,7 @@ GyroORMはAPIベースで操作を行うJavaで実装されたO/Rマッパーで
 アクセスを行うことが出来るようにしました。  
 　  
 　  
-###まず以下に簡単な実装例を示します。  
+###簡単な実装例を交えて使い方を説明します。  
 　  
 　  
 DB処理を行いたいモデルを定義し　gyroorm.model.BaseModel　を継承  
@@ -29,14 +29,9 @@ public class User  extends BaseModel {
 	// 住所
 	public String address = null;
 }
-````
-　  
-　  
+````　  
 これでモデルの準備は完了したので、次にモデルのデータを保存するサンプルです。  
-　  
-　  
-サンプルではまずDBの接続情報を設定します。  
-現在対応しているDBはMySQLのみになります。  
+　  　  
 先ほどのモデルクラスを利用するテストコードを定義します。  
 　  
 **Test.java**  
@@ -48,9 +43,9 @@ import gyroorm.model.*;
 public class Test {
 
 	public static void main(String[] args) {
-		// DBへの接続情報を設定
-		// 1度だけ実行する
 		try {
+			// DBへの接続情報を設定
+			// 1度だけ実行する
 			// 先頭からドライバー名、接続文字列、ユーザ、パスワード
 			// 先頭のドライバー名は省略できます
 			GyroORMConfig.setPersisterConfig("com.mysql.jdbc.Driver", 
@@ -92,9 +87,20 @@ public class Test {
 	}
 }
 ````
+上記のサンプルではまずDBの接続情報を設定します。  
+現在対応しているDBはMySQLのみになります。  
+````
+// DBへの接続情報を設定
+// 1度だけ実行する
+// 先頭からドライバー名、接続文字列、ユーザ、パスワード
+// 先頭のドライバー名は省略できます
+GyroORMConfig.setPersisterConfig("com.mysql.jdbc.Driver", 
+										"jdbc:mysql://localhost/test", 
+											"testuser", 
+												"testpasswd");
+````
 　  
-　  
-上記のサンプルではまずモデルを保存するテーブルの存在確認を  
+次にモデルを保存するテーブルの存在確認を  
 existTableメソッドで行い、migrateメソッドによりテーブルを作成しています。  
 ````
 // モデルにマッピングされたテーブルが存在しない場合作成
@@ -102,8 +108,7 @@ if (!user.existTable()) {      // <-テーブルの存在確認メソッド
 	user.migrate();             // <-テーブル作成メソッド
 }
 ````
-　  
-　  
+　   
 その後、値を設定しモデルをDBへ保存するメソッドを呼び出しています。  
 ````
 // データ保存

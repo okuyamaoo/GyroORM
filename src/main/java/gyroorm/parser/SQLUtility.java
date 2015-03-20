@@ -251,15 +251,15 @@ public class SQLUtility {
 		String sep = "";
 		double generateId = -1.0;
 		
-		// 条件付加されていない場合は引数のModelの主キーを使って更新
+		// 条件付加されていない場合は引数のModelの主キーを使って削除
 		if (folder == null || folder.whereList == null || folder.whereList.size() < 1) {
-			// 主キーを使って更新
+			// 主キーを使って削除
 			queryWhereBuf.append(" where ");
 			queryWhereBuf.append(modelInfo.primaryKeyName).append(" = ? ");
 			queryWhereParams.add(model.getId());
 		} else {
 
-			// QueryFolder内のWhere句を使って更新
+			// QueryFolder内のWhere句を使って削除
 			String whereSep = "where ";
 			for (Map<String, Object[]> whereMap : folder.whereList) {
 				queryWhereBuf.append(whereSep);

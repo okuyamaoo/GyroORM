@@ -91,16 +91,16 @@ public class Test {
   
 上記のサンプルではまずモデルを保存するテーブルの存在確認をしています。  
 ````
-			// モデルにマッピングされたテーブルが存在しない場合作成
-			if (!user.existTable()) {      // <-テーブルの存在確認メソッド
-				user.migrate();             // <-テーブル作成メソッド
-			}
+// モデルにマッピングされたテーブルが存在しない場合作成
+if (!user.existTable()) {      // <-テーブルの存在確認メソッド
+	user.migrate();             // <-テーブル作成メソッド
+}
 ````
   
 その後、値を設定しデータを保存するメソッドを呼び出しています。  
 ````
-			// データ保存
-			user.save();
+// データ保存
+user.save();
 ````
   
   
@@ -108,68 +108,94 @@ public class Test {
 次に、DBからモデルを取得するサンプルです。  
 先ほどの**Test.java**に以下のメソッドを追加します。  
 ````
-	// モデルクラスを取得します
-	public void executeFind() throws Exception {
-			// モデルクラスをインスタンス化
-			User user = new User();
+// モデルクラスを取得します
+public void executeFind() throws Exception {
+		// モデルクラスをインスタンス化
+		User user = new User();
 
-			// データ件数を取得
-			int dataCount = user.findCount(); <-件数取得メソッド
-			System.out.println("テーブル名[User]のデータ件数 = " + dataCount + " 件");
+		// データ件数を取得
+		int dataCount = user.findCount(); <-件数取得メソッド
+		System.out.println("テーブル名[User]のデータ件数 = " + dataCount + " 件");
 
-			// データを全件取得
-			List<BaseModel> list = user.find(); // <-データリスト取得メソッド
+		// データを全件取得
+		List<BaseModel> list = user.find(); // <-データリスト取得メソッド
 
-			// データ表示
-			for (int idx = 0; idx < list.size(); idx++) {
+		// データ表示
+		for (int idx = 0; idx < list.size(); idx++) {
+			User resultUser = (User)list.get(idx); // モデルクラスへキャスト
 
-				User resultUser = (User)list.get(idx); // モデルクラスへキャスト
+			// モデルの属性値表示
+			System.out.println(resultUser.userid);
+			System.out.println(resultUser.name);
+			System.out.println(resultUser.zip);
+			System.out.println(resultUser.address);
+			System.out.println("-------------------");
+		}
 
-				// モデルの属性値表示
-				System.out.println(resultUser.userid);
-				System.out.println(resultUser.name);
-				System.out.println(resultUser.zip);
-				System.out.println(resultUser.address);
-				System.out.println("-------------------");
-			}
+		// 条件を設定してデータ取得
+		List<BaseModel> list2 = selectTestTable.where("zip like ?", "999%").find(); // <- 属性値のzipが999から始まるデータを取得
+		System.out.println("テーブル名[User]のzip属性が999で始まるデータを取得");
+		for (int idx = 0; idx < list2.size(); idx++) {
 
-			// 条件を設定してデータ取得
-			List<BaseModel> list2 = selectTestTable.where("zip like ?", "999%").find(); // <- 属性値のzipが999から始まるデータを取得
-			System.out.println("テーブル名[User]のzip属性が999で始まるデータを取得");
-			for (int idx = 0; idx < list2.size(); idx++) {
+			User resultUser = (User)list2.get(idx); // モデルクラスへキャスト
 
-				User resultUser = (User)list2.get(idx); // モデルクラスへキャスト
+			// モデルの属性値表示
+			System.out.println(resultUser.userid);
+			System.out.println(resultUser.name);
+			System.out.println(resultUser.zip);
+			System.out.println(resultUser.address);
+			System.out.println("-------------------");
+		}
+		// 条件を変更してデータを取得
+		List<BaseModel> list3 = selectTestTable.newQuery()  // <-古いクエリ条件を削除
+	                                                              .where("address = ?", "大阪府大阪市XX町３１ー５")  // <- 属性値の住所がマッチするデータを取得
+	                                                              .find(); 
 
-				// モデルの属性値表示
-				System.out.println(resultUser.userid);
-				System.out.println(resultUser.name);
-				System.out.println(resultUser.zip);
-				System.out.println(resultUser.address);
-				System.out.println("-------------------");
+		System.out.println("テーブル名[User]のAddress属性が　大阪府大阪市XX町３１ー５　のデータを取得");
+		for (int idx = 0; idx < list3.size(); idx++) {
+			User resultUser = (User)list3.get(idx); // モデルクラスへキャスト
 
-
-			// 条件を変更してデータを取得
-			List<BaseModel> list3 = selectTestTable.newQuery()  // <-古いクエリ条件を削除
-			                                                              .where("address = ?", "大阪府大阪市XX町３１ー５")  // <- 属性値の住所がマッチするデータを取得
-			                                                              .find(); 
-
-			System.out.println("テーブル名[User]のAddress属性が　大阪府大阪市XX町３１ー５　のデータを取得");
-			for (int idx = 0; idx < list3.size(); idx++) {
-
-				User resultUser = (User)list3.get(idx); // モデルクラスへキャスト
-
-				// モデルの属性値表示
-				System.out.println(resultUser.userid);
-				System.out.println(resultUser.name);
-				System.out.println(resultUser.zip);
-				System.out.println(resultUser.address);
-				System.out.println("-------------------");
-
-			}
-
-			// 終了
-	}
+			// モデルの属性値表示
+			System.out.println(resultUser.userid);
+			System.out.println(resultUser.name);
+			System.out.println(resultUser.zip);
+			System.out.println(resultUser.address);
+			System.out.println("-------------------");
+		}
+		// 終了
+}
 ````
+  
+上記のサンプルではまずUserモデルの件数を取得しています。
+````
+// データ件数を取得
+int dataCount = user.findCount(); <-件数取得メソッド
+````
+findCountメソッドを利用することでuserモデルが格納されているテーブルの件数を取得可能です。  
+  
+  
+次にUserモデルのデータを全件取得しています。
+````
+// データを全件取得
+List<BaseModel> list = user.find(); // <-データリスト取得メソッド
+````
+findメソッドによりUserモデルが格納されているテーブルの全データを取得可能です。  
+取得されたデータはListに格納されヘネリクスはBaseModelとなります。  
+  
+表示する場合は以下のようになります。  
+````
+// データ表示
+for (int idx = 0; idx < list.size(); idx++) {
+	User resultUser = (User)list.get(idx); // モデルクラスへクラスキャスト
 
-
+	// モデルの属性値表示
+	System.out.println(resultUser.userid);
+	System.out.println(resultUser.name);
+	System.out.println(resultUser.zip);
+	System.out.println(resultUser.address);
+	System.out.println("-------------------");
+}
+````
+クラスキャストを行っている部分に注意してください。  
+  
 

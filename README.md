@@ -400,9 +400,8 @@ int deleteCount = user.where("address like ?", "兵庫県神戸市%").where("zip
 　  
 　  
 ####●トランザクションを利用する
-更新系処理を行う場合などトランザクションにより処理範囲を保護することが通常ありますので、  
-トランザクション処理をサポートしています。  
-ここまでのサンプル場合は処理メソッド実行毎にトランザクションを実行するため、  
+トランザクションにより処理範囲を隔離することが可能です。
+ここまでのサンプルでは処理メソッド実行毎にトランザクションを実行するため、  
 処理成功時は必ずcommitとなり、失敗時は自動的にrollbackとなります。  
 　  
 以下のサンプルはトランザクション適応範囲を広げる方法になります。  
@@ -472,5 +471,43 @@ if (folder != null) folder.rollbackTransaction();
 //  トランザクション終了
 if (folder != null) folder.endTransaction();
 ````
+　  
+　  
+新規データ登録時のトランザクション適応方法は以下のようになります。  
+````
+// Transaction制御オフジェクトを取得します。
+folder = TransactionFolder.getInstance();
 
+// モデルクラスをインスタンス化
+User userHoge = new User();
+User userFuga = new User();
 
+// 同一トランザクション内で実行したい場合モデルオブジェクトにFolderをセット
+userHoge.setTransactionFolder(folder);
+userFuga.setTransactionFolder(folder);
+
+userHoge.name = "hoge";
+userFuga.name = "fuga";
+
+userHoge.save();
+userFuga.save();
+
+if  (???) {
+	//　必要に応じてRollback
+	folder.rollbackTransaction(); 
+} else {
+	//　必要に応じてコミット
+	folder.commitTransaction(); 
+}
+
+//  トランザクション終了
+folder.endTransaction();
+````
+　  
+新規登録時等は取得したモデルではない場合は  
+インスタンス化したモデルにFolderをセットして処理を行います。  
+````
+// 同一トランザクション内で実行したい場合モデルオブジェクトにFolderをセット
+userHoge.setTransactionFolder(folder);
+userFuga.setTransactionFolder(folder);
+````

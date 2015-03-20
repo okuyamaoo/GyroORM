@@ -151,12 +151,15 @@ public void executeFind() throws Exception {
 		}
 }
 ````
+　  
 上記のサンプルではまずUserモデルの件数を取得しています。
+findCountメソッドを利用することでuserモデルが格納されているテーブルの件数を取得可能です。  
+
 ````
 // データ件数を取得
 int dataCount = user.findCount(); // <-件数取得メソッド
 ````
-findCountメソッドを利用することでuserモデルが格納されているテーブルの件数を取得可能です。  
+
 　  
 　  
 次にUserモデルのデータを全件取得しています。
@@ -211,6 +214,7 @@ public void executeSearch() throws Exception {
 		}
 		// 条件を変更してデータを取得
 		List<BaseModel> list3 = selectTestTable.newQuery()  // <-古いクエリ条件を削除
+	                                                              .where("zip like ?", "999%")         // <- 属性値のzipが999から始まるデータを取得
 	                                                              .where("address = ?", "大阪府大阪市XX町３１ー５")  // <- 属性値の住所がマッチするデータを取得
 	                                                              .find(); 
 
@@ -229,6 +233,31 @@ public void executeSearch() throws Exception {
 }
 ````
 　  
-
+上記サンプルでは検索条件としてzip属性に部分一致検索であるLIKE検索を行い  
+パラメータとして　999%　を渡しています。  
+一般的なプリペアードステートメントと同様の表記法となります。  
+````
+// 条件を設定してデータ取得
+List<BaseModel> list2 = selectTestTable.where("zip like ?", "999%").find(); // <- 属性値のzipが999から始まるデータを取得
+````
+　  
+　  
+複数の条件を設定する場合は条件分whereメソッドを呼び出します。
+````
+// 条件を変更してデータを取得
+List<BaseModel> list3 = selectTestTable.newQuery()  // <-古いクエリ条件を削除
+                                              .where("zip like ?", "999%")         // <- 属性値のzipが999から始まるデータを取得
+                                              .where("address = ?", "大阪府大阪市XX町３１ー５")  // <- 属性値の住所がマッチするデータを取得
+                                              .find(); 
+````
+また、1つのwhereメソッド内に複数のパラメータを含めたい場合(in句等の場合)はパラメータをObjectの配列にして渡します。  
+以下のようになります。
+````
+String[] parameters = {"999-0001", "999-0002", "999-0003"};
+List<BaseModel> list3 = selectTestTable.newQuery()  // <-古いクエリ条件を削除
+                                              .where("zip in (?, ?, ?)", parameters)         // 複数のパラメータを指定
+                                              .where("address = ?", "大阪府大阪市XX町３１ー５")
+                                              .find();
+````
 　  
 

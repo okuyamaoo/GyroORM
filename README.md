@@ -1,6 +1,6 @@
 # GyroORM
 GyroORM is O/RMapper  
-　 
+　   
 GyroORMはAPIベースで操作を行うJavaで実装されたO/Rマッパーです。  
 モデルクラスにGyroORMの規定クラスを継承するだけで簡単にDBへの  
 アクセスを行うことが出来るようにしました。  
@@ -9,7 +9,7 @@ GyroORMはAPIベースで操作を行うJavaで実装されたO/Rマッパーで
 ###簡単な実装例を交えて使い方を説明します。  
 　  
 ####●モデル定義
-DB処理を行いたいモデルを定義し　gyroorm.model.BaseModel　を**継承**
+DB処理を行いたいモデルを定義し　gyroorm.model.BaseModel　を**継承**  
 **User.java**
 ````
 import gyroorm.model.*;
@@ -31,7 +31,8 @@ public class User  extends BaseModel {
 }
 ````
 これでモデルの準備は完了しました。  
-
+　  
+　  
 ####●モデルクラスの保存  
 次に先ほどのモデルクラスを保存するテストコードを定義します。  
 

@@ -8,8 +8,8 @@ GyroORMはAPIベースで操作を行うJavaで実装されたO/Rマッパーで
 　  
 ###簡単な実装例を交えて使い方を説明します。  
 　  
-　  
-DB処理を行いたいモデルを定義し　gyroorm.model.BaseModel　を継承  
+#####モデル定義#####
+DB処理を行いたいモデルを定義し　gyroorm.model.BaseModel　を**継承**
 **User.java**
 ````
 import gyroorm.model.*;
@@ -30,10 +30,11 @@ public class User  extends BaseModel {
 	public String address = null;
 }
 ````
-これでモデルの準備は完了したので、次にモデルのデータを保存するサンプルです。  
-　  　  
-先ほどのモデルクラスを利用するテストコードを定義します。  
-　  
+これでモデルの準備は完了しました。  
+
+#####モデルクラスの保存#####　  　  
+次に先ほどのモデルクラスを保存するテストコードを定義します。  
+
 **Test.java**  
 ````
 import java.util.*;
@@ -87,6 +88,8 @@ public class Test {
 	}
 }
 ````
+　  
+　  
 上記のサンプルではまずDBの接続情報を設定します。  
 現在対応しているDBはMySQLのみになります。  
 ````
@@ -105,7 +108,7 @@ existTableメソッドで行い、migrateメソッドによりテーブルを作
 ````
 // モデルにマッピングされたテーブルが存在しない場合作成
 if (!user.existTable()) {      // <-テーブルの存在確認メソッド
-	user.migrate();             // <-テーブル作成メソッド
+	user.migrate();            // <-テーブル作成メソッド
 }
 ````
 　   
@@ -117,7 +120,9 @@ user.save();
 上記のようにDBを意識せずモデルの操作で処理を完了しています。  
 　  
 　  
-次に、DBからモデルを取得するサンプルです。  
+　  
+#####モデルの件数と全データを取得#####
+次に、DBからモデルの件数と全データを取得するサンプルです。  
 先ほどの**Test.java**に以下のメソッドを追加します。  
 ````
 // モデルクラスを取得します
@@ -126,7 +131,7 @@ public void executeFind() throws Exception {
 		User user = new User();
 
 		// データ件数を取得
-		int dataCount = user.findCount(); <-件数取得メソッド
+		int dataCount = user.findCount(); // <-件数取得メソッド
 		System.out.println("テーブル名[User]のデータ件数 = " + dataCount + " 件");
 
 		// データを全件取得
@@ -143,6 +148,51 @@ public void executeFind() throws Exception {
 			System.out.println(resultUser.address);
 			System.out.println("-------------------");
 		}
+}
+````
+上記のサンプルではまずUserモデルの件数を取得しています。
+````
+// データ件数を取得
+int dataCount = user.findCount(); // <-件数取得メソッド
+````
+findCountメソッドを利用することでuserモデルが格納されているテーブルの件数を取得可能です。  
+　  
+　  
+次にUserモデルのデータを全件取得しています。
+````
+// データを全件取得
+List<BaseModel> list = user.find(); // <-データリスト取得メソッド
+````
+findメソッドによりUserモデルが格納されているテーブルの全データを取得可能です。  
+取得されたデータはListに格納されジェネリクスはBaseModelとなります。  
+　　  
+　　  
+表示する場合は以下のようになります。  
+````
+// データ表示
+for (int idx = 0; idx < list.size(); idx++) {
+	User resultUser = (User)list.get(idx); // モデルクラスへクラスキャスト
+
+	// モデルの属性値表示
+	System.out.println(resultUser.userid);
+	System.out.println(resultUser.name);
+	System.out.println(resultUser.zip);
+	System.out.println(resultUser.address);
+	System.out.println("-------------------");
+}
+````
+クラスキャストを行っている部分に注意してください。  
+　  
+　  
+　  
+#####条件指定を行ってモデルを取得する#####
+次に、条件指定を行ったうえでDBからモデルを取得するサンプルです。  
+先ほどの**Test.java**に以下のメソッドを追加します。  
+````
+// モデルクラスを取得します
+public void executeSearch() throws Exception {
+		// モデルクラスをインスタンス化
+		User user = new User();
 
 		// 条件を設定してデータ取得
 		List<BaseModel> list2 = selectTestTable.where("zip like ?", "999%").find(); // <- 属性値のzipが999から始まるデータを取得
@@ -178,38 +228,6 @@ public void executeFind() throws Exception {
 }
 ````
 　  
-　  
-上記のサンプルではまずUserモデルの件数を取得しています。
-````
-// データ件数を取得
-int dataCount = user.findCount(); <-件数取得メソッド
-````
-findCountメソッドを利用することでuserモデルが格納されているテーブルの件数を取得可能です。  
-　  
-　  
-次にUserモデルのデータを全件取得しています。
-````
-// データを全件取得
-List<BaseModel> list = user.find(); // <-データリスト取得メソッド
-````
-findメソッドによりUserモデルが格納されているテーブルの全データを取得可能です。  
-取得されたデータはListに格納されジェネリクスはBaseModelとなります。  
-　　  
-　　  
-表示する場合は以下のようになります。  
-````
-// データ表示
-for (int idx = 0; idx < list.size(); idx++) {
-	User resultUser = (User)list.get(idx); // モデルクラスへクラスキャスト
 
-	// モデルの属性値表示
-	System.out.println(resultUser.userid);
-	System.out.println(resultUser.name);
-	System.out.println(resultUser.zip);
-	System.out.println(resultUser.address);
-	System.out.println("-------------------");
-}
-````
-クラスキャストを行っている部分に注意してください。  
 　  
 

@@ -12,6 +12,8 @@ public class GyroORMConfig {
 
 	public static int PERSISTER_MODE_RDMBS = PersisterContext.GLOBAL_PERSIST_MODE_RDB;
 	public static int PERSISTER_MODE_MONGODB = PersisterContext.GLOBAL_PERSIST_MODE_MONGO;
+	public static String DEFAULT_DRIVER_NAME = "com.mysql.jdbc.Driver";
+
 
 	public volatile static boolean userLoggerSetting = false;
 	public volatile static String LOGGER_NAME = null;
@@ -34,6 +36,30 @@ public class GyroORMConfig {
 		}
 	}
 
+	/**
+	 * マスターDBの接続設定 .<br>
+	 * driverNameをデフォルトとして"com.mysql.jdbc.Driver"を利用して省略<br>
+	 *
+	 * @param connectUri
+	 * @param user
+	 * @param pass
+	 */
+	public static void setPersisterConfig(String connectUri, String user, String pass) throws ClassNotFoundException, GyroORMException {
+		setPersisterConfig(PERSISTER_MODE_RDMBS, DEFAULT_DRIVER_NAME, connectUri, user, pass);
+	}
+
+	/**
+	 * マスターDBの接続設定
+	 *
+	 * @param driverName
+	 * @param connectUri
+	 * @param user
+	 * @param pass
+	 */
+	public static void setPersisterConfig(String driverName, String connectUri, String user, String pass) throws ClassNotFoundException, GyroORMException {
+		setPersisterConfig(PERSISTER_MODE_RDMBS, driverName, connectUri, user, pass);
+	}
+	
 	/**
 	 * マスターDBの接続設定
 	 *

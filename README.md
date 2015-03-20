@@ -105,8 +105,8 @@ GyroORMConfig.setPersisterConfig("com.mysql.jdbc.Driver",
 ````
 　  
 次にモデルを保存するテーブルの存在確認を  
-existTableメソッドで行い、migrateメソッドによりテーブルを作成しています。 
-GyroORMは内部的に一意となるキーをシーケンス値を主キーとして全てのテーブルに作成します。  
+existTableメソッドで行い、migrateメソッドによりテーブルを作成しています。   
+GyroORMは内部的に主キーをシーケンス値を用いて自動的作成します。  
 ````
 // モデルにマッピングされたテーブルが存在しない場合作成
 if (!user.existTable()) {      // <-テーブルの存在確認メソッド

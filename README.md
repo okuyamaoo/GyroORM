@@ -29,7 +29,7 @@ public class User  extends BaseModel {
 	// 住所
 	public String address = null;
 }
-````　  
+````
 これでモデルの準備は完了したので、次にモデルのデータを保存するサンプルです。  
 　  　  
 先ほどのモデルクラスを利用するテストコードを定義します。  

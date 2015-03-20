@@ -50,9 +50,9 @@ public class Test {
 			// 先頭からドライバー名、接続文字列、ユーザ、パスワード
 			// 先頭のドライバー名は省略できます
 			GyroORMConfig.setPersisterConfig("com.mysql.jdbc.Driver", 
-																	"jdbc:mysql://localhost/test", 
-																		"testuser", 
-																			"testpasswd");
+														"jdbc:mysql://localhost/test", 
+															"testuser", 
+																"testpasswd");
 
 			Test test = new Test();
 			test.executeCreate(); // 処理実行
